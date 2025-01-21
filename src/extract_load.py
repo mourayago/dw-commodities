@@ -21,7 +21,19 @@ commodities = {'CL=F', 'GC=F', 'SI=F'}
 # Função para buscar dados de uma commodity
 def search_commodities_data(ticker_symbol, lookback_days=15):
     """
-    Busca os dados históricos de um ticker específico para os últimos X dias.
+    Busca os dados históricos de uma commodity e retorna um dataframe.
+
+    Parameters
+    ----------
+    ticker_symbol : str
+        Símbolo da commodity.
+    lookback_days : int, optional
+        Número de dias para buscar histórico. Padrão é 15.
+
+    Returns
+    -------
+    pandas.DataFrame
+        Dataframe com os dados históricos da commodity.
     """
     ticker = yf.Ticker(ticker_symbol)
     data = ticker.history(period=f'{lookback_days+1}d', interval='1d')[['Close']]  # Obtém pelo menos 1 dia extra para segurança
@@ -36,6 +48,14 @@ def search_commodities_data(ticker_symbol, lookback_days=15):
 
 # Função para buscar dados de todas as commodities
 def search_all_commodities():
+    """
+    Busca os dados históricos de todas as commodities e concatena em um único dataframe.
+    
+    Returns
+    -------
+    pandas.DataFrame
+        Dataframe com os dados históricos de todas as commodities.
+    """
     all_data = []
     for symbol in commodities:
         data = search_commodities_data(symbol)
@@ -44,6 +64,17 @@ def search_all_commodities():
 
 # Função para carregar os dados no banco
 def load_data(df, schema='public'):
+    """
+    Carrega os dados em um banco PostgreSQL.
+    
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Dataframe com os dados a serem carregados
+    schema : str, optional
+        Nome do schema do banco de dados, default é 'public'
+    """
+    
     df.to_sql('commodities_data', con=engine, schema=schema, index=True, if_exists='replace')
 
 if __name__ == '__main__':
