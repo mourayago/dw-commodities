@@ -1,11 +1,7 @@
-import os
-import pandas as pd
-import streamlit as st
-from sqlalchemy import create_engine
-from sqlalchemy.exc import ProgrammingError
-from dotenv import load_dotenv
 import psycopg2
-
+import os
+from dotenv import load_dotenv
+import pandas as pd
 
 dotenv_path = os.path.join("dw-commodities/src/", ".env")
 load_dotenv(dotenv_path)
@@ -21,30 +17,15 @@ DB_SCHEMA = os.getenv('DB_SCHEMA_PROD')
 # Criar a URL de conexão do banco de dados
 DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:5432/{DB_NAME}"
 
-
 conn = psycopg2.connect(
-    dbname=,
-    user=,
-    password=,
-    host=,
-    port=
+    dbname=os.getenv('DB_NAME_PROD'),
+    user=os.getenv('DB_USER_PROD'),
+    password=os.getenv('DB_PASS_PROD'),
+    host=os.getenv('DB_HOST_PROD'),
+    port="5432"
 )
 
 print('connected')
 
 df = pd.read_sql("SELECT * FROM public.dm_commodities", conn)	
-
-# Configurar a página do Streamlit
-st.set_page_config(page_title='Dashboard do diretor', layout='wide')
-
-# Título do Dashboard
-st.title('Esse e um texto')
-
-# Descrição
-st.write("""
-Este dashboard mostra os dados de commodities e suas transações.
-""")
-
-# Obter os dados
-
-st.dataframe(df)
+print(df)
