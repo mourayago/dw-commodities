@@ -1,21 +1,29 @@
-
 version: 2
 
-models:
-  - name: my_first_dbt_model
-    description: "A starter dbt model"
-    columns:
-      - name: id
-        description: "The primary key for this table"
-        data_tests:
-          - unique
-          - not_null
-
-  - name: my_second_dbt_model
-    description: "A starter dbt model"
-    columns:
-      - name: id
-        description: "The primary key for this table"
-        data_tests:
-          - unique
-          - not_null
+sources:
+  - name: commodities
+    schema: public
+    tables:
+      - name: commodities_data
+        description: "Tabela que contém dados históricos de commodities"
+        columns:
+          - name: index
+            description: "Indice"
+          - name: closeddate
+            description: "Data da observação"
+          - name: Close
+            description: "Preço de fechamento da commodity"
+          - name: symbol
+            description: "Símbolo da commodity"
+            
+      - name: movimentacao_commodities
+        description: "Tabela seed"
+        columns:
+          - name: date
+            description: "Data da transação"
+          - name: symbol
+            description: "Símbolo da commodity"
+          - name: action
+            description: "Tipo de transação (buy/sell)"
+          - name: quantity
+            description: "Quantidade transacionada"
